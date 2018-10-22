@@ -32,12 +32,12 @@ weight = 5
   year = 2012
   
 [[education.courses]]
-  course = "MEng in Agronomy"
+  course = "MEng in Forestry"
   institution = "University of Cordoba (Spain)"
   year = 2011
 
 [[education.courses]]
-  course = "MEng in Forestry"
+  course = "MEng in Agronomy"
   institution = "University of Cordoba (Spain)"
   year = 2010
  
