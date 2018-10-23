@@ -22,7 +22,7 @@ event_url = "http://www.graduateschool-eps.info/index.php/training-programme/sym
 location = "Utrecht, The Netherlands"
 
 # Is this a selected talk? (true/false)
-selected = true
+selected = false
 
 
 # Links (optional).
