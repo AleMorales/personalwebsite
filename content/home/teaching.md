@@ -15,12 +15,12 @@ weight = 60
 
 +++
 
-I have been involved in teaching the following courses at Wageningen University:
+I have contributed to teaching several courses at Wageningen University & Research:
 
-- [CSA-34306](https://ssc.wur.nl/Handbook/Course/CSA-34306): Ecological Modelling and Data in R
-- [CSA-30806](https://ssc.wur.nl/Handbook/Course/CSA-30806): Research Methods in Crop Science
-- [PPH-30806](https://ssc.wur.nl/Handbook/Course/PPH-30806): Plant Plasticity and Adaptation
-- [HPP-31806](https://ssc.wur.nl/Handbook/Course/HPP-31806): Advanced Methods for Plant-Climate Research in Controlled Environments
-- [Fundamentals of Crop Physiology in a Changing World](https://www.pe-rc.nl/crop-physiology)
+- [CSA-34306](https://ssc.wur.nl/Handbook/Course/CSA-34306): Ecological Modelling and Data in R (2017, 2018)
+- [CSA-30806](https://ssc.wur.nl/Handbook/Course/CSA-30806): Research Methods in Crop Science (2018)
+- [PPH-30806](https://ssc.wur.nl/Handbook/Course/PPH-30806): Plant Plasticity and Adaptation (2016)
+- [HPP-31806](https://ssc.wur.nl/Handbook/Course/HPP-31806): Advanced Methods for Plant-Climate Research in Controlled Environments (2016)
+- [Fundamentals of Crop Physiology in a Changing World](https://www.pe-rc.nl/crop-physiology) (summer course organized by PE&RC and University of Florida in 2018)
 
-I also developed interactive modules for a MOOC on Photosynthesis as part of the [Biololar Cells](http://www.biosolarcells.nl/en/home.html) program.
+I also regularly chair MSc Thesis Rings.
