@@ -26,7 +26,7 @@ date_format = "January 2006"
   date_start = "2017-04-15"
   date_end = ""
   description = """
-  Responsibilities included:  
+  Responsibilities include:  
   - Research in the NWO project *Understanding responses to simultaneously and sequentially occurring abiotic stresses typical of climate change in rice and Arabidopsis*  
   - Supervision of MSc students  
   - Assistance with teaching  
@@ -40,7 +40,7 @@ date_format = "January 2006"
   date_start = "2018-01-01"
   date_end = ""
   description = """  
-  Responsibilities included:  
+  Responsibilities include:  
   - Research in the NWO project *Understanding responses to simultaneously and sequentially occurring abiotic stresses typical of climate change in rice and Arabidopsis*  
   - Supervision of MSc students 
   """
