@@ -6,7 +6,7 @@ date = "2018-07-01"
 title = "Fundamentals of Crop Physiology in a Changing World"
 
 # Project summary to display on homepage.
-summary = "Summer course organized by PE&RC and University of Florida"
+summary = ""
 
 # Tags: can be used for filtering projects.
 tags = ["photosynthesis","past"]
