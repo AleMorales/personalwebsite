@@ -5,10 +5,10 @@ active = true
 date = 2016-04-20T00:00:00
 
 title = "Selected Presentations"
-subtitle = ""
+subtitle = "[Full List <i class='fa fa-angle-double-right'></i>](talk)"
 
 # Order that this section will appear in.
-weight = 29
+weight = 4
 
 # List format.
 #   0 = Simple

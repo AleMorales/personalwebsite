@@ -7,10 +7,10 @@ active = true
 date = 2016-04-20T00:00:00
 
 title = "Selected Publications"
-subtitle = ""
+subtitle = "[Full List <i class='fa fa-angle-double-right'></i>](publication)"
 
 # Order that this section will appear in.
-weight = 10
+weight = 3
 
 # List format.
 #   0 = Simple

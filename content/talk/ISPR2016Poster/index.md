@@ -22,7 +22,7 @@ event_url = "http://www.ps2016.com/"
 location = "Maastricht, The Netherlands"
 
 # Is this a selected talk? (true/false)
-selected = false
+selected = true
 
 
 # Links (optional).

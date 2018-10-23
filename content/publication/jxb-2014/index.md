@@ -27,7 +27,7 @@ abstract = "Incident irradiance on plant leaves often fluctuates, causing dynami
 abstract_short = "Review of knowledge on how different environmental factors (temperature, humidity, CO₂) affect dynamic photosynthesis under fluctuating light."
 
 # Is this a selected publication? (true/false)
-selected = true
+selected = false
 
 # Links (optional).
 url_pdf = "https://academic.oup.com/jxb/article-pdf/66/9/2415/18044775/eru406.pdf"
