@@ -291,14 +291,14 @@ enableGitInfo = false
   align_right = true
 
 [[menu.main]]
-  name = "Home"
+  name = "About"
   url = "#about"
   weight = 1
   
-[[menu.main]]
-  name = "Experience"
-  url = "#experience"
-  weight = 2
+#[[menu.main]]
+#  name = "Experience"
+#  url = "#experience"
+#  weight = 2
 
 [[menu.main]]
   name = "Publications"
@@ -306,7 +306,7 @@ enableGitInfo = false
   weight = 3
   
 [[menu.main]]
-  name = "Presentations & Posters"
+  name = "Presentations"
   url = "#talks_selected"
   weight = 4
   

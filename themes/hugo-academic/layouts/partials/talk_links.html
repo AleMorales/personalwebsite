@@ -6,13 +6,18 @@
   {{ i18n "btn_pdf" }}
 </a>
 {{ end }}
+{{ with $.Params.url_poster }}
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ . | absURL }}" target="_blank" rel="noopener">
+  {{ i18n "btn_poster" }}
+</a>
+{{ end }}
 {{ with $.Params.url_slides }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ . | relURL }}" target="_blank">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ . | absURL }}" target="_blank">
   {{ i18n "btn_slides" }}
 </a>
 {{ end }}
 {{ with $.Params.url_video }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ . | relURL }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ . | absURL }}" target="_blank" rel="noopener">
   {{ i18n "btn_video" }}
 </a>
 {{ end }}

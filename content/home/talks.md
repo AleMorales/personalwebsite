@@ -21,5 +21,6 @@ list_format = 0
 
 # Exclude talks that are shown in the Selected Talks widget?
 exclude_selected = false
+
 +++
 

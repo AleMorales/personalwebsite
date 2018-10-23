@@ -40,6 +40,7 @@ tags = []
 # Links (optional).
 url_pdf = ""
 url_slides = ""
+url_poster = ""
 url_video = ""
 url_code = ""
 
