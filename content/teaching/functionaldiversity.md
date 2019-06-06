@@ -12,7 +12,7 @@ summary = ""
 image_preview = ""
 
 # Tags: can be used for filtering projects.
-tags = ["modelling", "FSPM","current"]
+tags = ["modelling", "FSPM","past"]
 
 # Optional external URL for project (replaces project detail page).
 external_link = "https://ssc.wur.nl/Handbook/Course/CSA-32806" 
