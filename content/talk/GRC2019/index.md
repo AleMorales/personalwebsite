@@ -1,6 +1,6 @@
 +++
 title = "Mesophyll and stomatal limitations to CO2 diffusion during photosynthetic induction"
-date = 2019-06-10T16:00:00  # Schedule page publish date.
+date = 2019-06-03T16:00:00  # Schedule page publish date.
 draft = false
 
 # Talk start and end times.
