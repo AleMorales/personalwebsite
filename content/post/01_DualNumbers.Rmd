@@ -1,0 +1,174 @@
+---
+title: Automatic Differentiation with Dual Numbers
+author: Alejandro Morales
+date: '2019-08-04'
+slug: automatic-differentiation-with-dual-numbers
+categories:
+  - Julia
+  - Numerical methods
+tags:
+  - Numerical
+image:
+  caption: ''
+  focal_point: ''
+---
+
+**tl;dr:** Given any model that maps inputs to outputs, Dual Numbers can be used to calculate the exact derivative of any output with respect to any input without requiring the user to calculate these derivatives. An implementation of a Dual Number system only requires to define a data type or class with methods for every function and operator used inside the model.
+
+**What is Automatic Differentiation?**
+
+Automatic Differentiation (AD) is a series of methods to calculate the derivative of outputs of a model with respect to its inputs. Derivatives play a fundamental role in different areas of mathematics, statistics and engineering. For example, derivatives are needed to calculate:
+
+- Gradients of objective functions used in optimization, parameter estimation and training of machine learning algorithms.  
+- Jacobian matrices required to solve stiff systems of differential equations.  
+- Local sensitivity of models to inputs.  
+- Uncertainty and error propagation through models.   
+
+The advantages of AD with respect to other techniques are:
+
+1. It works with **any model** as long as the individual functions and data structures are supported by the AD implementation.
+2. It introduces **no numerical error**  and the derivatives are calculated with the same accuracy as the outputs.
+
+This means that, if you use an appropiate AD package, you can calculate the derivatives of any model accurately and easily. You can even calculate the derivatives of models for which the source code is not available or is too complex to analyse for a human. It really does not matter the type of model: it could be a simple formula, a system of differential equations, an agent based model or any other kind of algorithm.
+
+There are different types of AD techniques available (the website http://www.autodiff.org has a long list of AD tools), but in this article I will focus on dual numbers as they are very easy to implement and transparent. Basically, any programming language that allows to definining methods for functions and operators (sorry Java!) will allow this approach.
+
+**What are Dual Numbers?**
+
+A dual number $y$ is given by the expression:
+
+$$
+y = a + b \cdot \epsilon
+$$
+
+such that $\epsilon > 0$ and $\epsilon^2 = 0$. This is actually very similar to the idea of a complex number, the main difference being than in a complex number $\epsilon^2 = -1$. Converting a "normal" number into a dual number consists of attaching an extra dimension represented by $b \cdot \epsilon$. The algebra of dual numbers is pretty straight forward if we use this additive representation. For example, the rules for addition and multiplication of two dual numbers are:
+
+$$
+\begin{aligned}
+y_1 + y_2 &= (a_1 + b_1\epsilon) + (a_2 + b_2\epsilon) &&= a_1 + a_1 + (b_1 + b_2)\epsilon\\
+y_1 \cdot y_2 &= (a_1 + b_1\epsilon) \cdot (a_2 + b_2\epsilon) = a_1 a_2 + a_1 b_2\epsilon + a_2 b_1 \epsilon + b_1 b_2 \epsilon^2 &&= a_1 a_2 + (a_1 b_2 + a_2 b_1)\epsilon\\
+\end{aligned}
+$$
+
+Notice that I simply multiplied and added both components of the dual numbers using the basic rules of arithmetic plus the fact that $\epsilon^2 = 0$.
+
+Now, how would one apply dual numbers to the problem of calculating the derivative of a function? Well, let's imagine that we have a function $f$ that takes an input $x$ and produces an output $y$:
+
+$$
+y = f(x)
+$$
+
+We can add an infinitesimal quantity to each side of the equation:
+
+$$
+y + \frac{\partial y}{\partial x} dx = f(x) + f^{\prime}(x)dx
+$$
+
+such that $f^{\prime} = \partial y/ \partial x$ is the derivative we aim to find and both $dy$ and $dx$ are infinitesimal increments. It turns out that infinitesimals obey the same rule as $\epsilon$, that is, $(dx)^2 = 0$. This means that we can represent $y$ as a dual number where the attached dimension is the derivative. That is, using the notation for dual numbers, $a = y = f(x)$ and $b =  \frac{\partial y}{\partial x} = f^{\prime}(x)$. Finally, from calculus we know that:
+
+$$
+f(x + dx) = f(x) + f^{\prime}(x)dx
+$$
+
+And finally you can (hopefully) see that, if we start with a dual number extension of x (i.e $x + dx$ where $a = x$ and $b = 1$) and apply $f$ using the algebra of dual numbers, we will get a dual number at the end where the attached dimension is the value of the derivative  $\partial y/ \partial x$.
+
+**Example implementation of dual numbers in Julia**
+
+That was a bit abstract and mathy, so let's see how dual numbers work in practice. For this demonstration I will use the programming language [Julia](https://julialang.org/) due to its easy syntax and semantics. The first step is to create a data type that can store the value of a variable and the extra dimension to store the derivative:
+
+```julia
+struct DN 
+    value
+    deriv
+end
+```
+
+This defines the type `DN` with fields `value` and `deriv`. Then, we need to define methods for the different operators and functions that we want to support with our dual numbers system. For example, the addition of two dual numbers (see definition above) can be implemented as:
+
+```julia
+Base.:+(a::DN, b::DN) = DN(a.value + b.value, a.deriv .+ b.deriv)
+```
+
+As you can see, this operation will result in a new dual number, where the new value is sum of the values of a and b (`a.value + b.value`) and the new derivative is the sum of the derivatives stored in a and b (`a.deriv .+ b.deriv`). Compare this to the expression given in the section above. As further examples, let's define the methods for multiplication (`*`) and for taking the power of a dual number to a constant (`^`):
+
+```julia
+Base.:*(a::DN, b::DN) = DN(a.value*b.value, b.value.*a.deriv + a.value*b.deriv)
+Base.:^(a::DN, b) = DN(a.value^b, b.*a.value.^(b.-1).*a.deriv)
+```
+
+Notice the pattern? The new value is always the result of applying the function or operator to the old values, whereas the new derivative is the result of applying the derivative of the function or operator to the old values and derivatives. So, if you know the derivative of a function, you can define the method for a dual number. Notice that the derivative stored in the new dual number is always a function of the derivative stored in the old dual numbers (as it should). This is the way dual numbers can propagate derivatives from the inputs to the outputs of your model!
+
+Let's see how dual numbers perform automatic differenation by taking a model such as:
+
+$$
+d = c (a + b)^2
+$$
+
+and we would like to compute the derivative of $d$ with respect to $a$. We simply create three dual numbers with the correct values and initial derivatives with respect to $a$:
+
+```julia
+julia> a = DN(1.0, 1.0)
+DN(1.0, 1.0)
+
+julia> b = DN(0.5, 0.0)
+DN(0.5, 0.0)
+
+julia> c = DN(2.0, 0.0)
+DN(2.0, 0.0)
+```
+
+Notice that the derivative of a variable with respect to itself is always one ($\partial a/\partial a = 1$), and it is 0 for any other independent variable ($\partial b/\partial a = 0$ because $b$ is not a function of $a$). Now we just apply the model:
+
+```julia
+julia> d = c*(a + b)^2
+DN(4.5, 6.0)
+```
+
+Et voilà! Our AD system tells us that the value of $d$ is 4.5 and the derivative with respect to $a$ is 6. Of course, this model is trivial and I could have calculated these values by hand, which I will do to show you that this actually works:
+
+$$
+\begin{aligned}
+d &= c(a + b)^2 &&= 2\cdot1.5^2 &= 4.5 \\
+\frac{\partial d}{\partial a} &= 2c(a + b) &&= 2\cdot2\cdot1.5 &= 6.0 \\
+\end{aligned}
+$$ 
+
+We can also calculate the derivatives with respect to all the inputs in one single pass. The trick is to include the derivatives of each input with respect to every other input in the initialization:
+
+```julia
+julia> a = DN(1.0, [1.0, 0.0, 0.0])
+DN(1.0, [1.0, 0.0, 0.0])
+
+julia> b = DN(0.5, [0.0, 1.0, 0.0])
+DN(0.5, [0.0, 1.0, 0.0])
+
+julia> c = DN(2.0, [0.0, 0.0, 1.0])
+DN(2.0, [0.0, 0.0, 1.0])
+```
+
+In this case, each dual number holds in the field `deriv` the derivatives of itself with respect to $a$, $b$ and $c$, respectively. And now: 
+
+```julia
+julia> d = c*(a + b)^2
+DN(4.5, [6.0, 6.0, 2.25])
+```
+
+Again, we can check that the results are correct:
+
+$$
+\begin{aligned}
+\frac{\partial d}{\partial a} &= 2c(a + b) &&= 2\cdot2\cdot1.5 &= 6.0 \\
+\frac{\partial d}{\partial b} &= 2c(a + b) &&= 2\cdot2\cdot1.5 &= 6.0 \\
+\frac{\partial d}{\partial c} &= (a + b)^2 &&= 1.5^2 &= 2.25
+\end{aligned}
+$$
+
+**Final remarks**
+
+The implementation of dual numbers presented in this article was simplified to avoid getting into technical details that are often necessary to ensure high performance. These technical details would vary across languages as not all object-oriented systems are the same (for examples in Julia you can take a look at the [UnitfulDual](https://github.com/AleMorales/UnitfulDual.jl) and [ForwardDiff](https://github.com/JuliaDiff/ForwardDiff.jl) packages). However, regardless of the language, the general approach will always be the same:
+
+1. Define a data type/class to hold the values and derivatives. 
+
+2. Define methods for operators and functions using the corresponding derivative rule. 
+
+In practice one would also have to define methods for non-mathematical functions as well as logical operators (like `>` and so on) to make sure that the program runs properly, but in all these cases the dual number should behave as a normal number (and only the contents of the `value` field should be used).  
