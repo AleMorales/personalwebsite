@@ -9,19 +9,17 @@ weight = 1
 
 # List your academic interests.
 [interests]
-  interests = [
-    "Plant Modelling",
-    "Photosynthesis",
-    "Plant Morphogenesis",
+  Skills = [
     "Bayesian Statistics",
+    "Process-based Modelling",
     "R language",
     "Julia language",
-    "Reproducible Research"
   ]
+  
 
 # List your qualifications (such as academic degrees).
 [[education.courses]]
-  course = "PhD in Crop Physiology"
+  course = "PhD in Systems Biology"
   institution = "Wageningen University"
   year = 2017
 
@@ -44,4 +42,5 @@ weight = 1
 
 # Biography
 
-I am a postdoc working in plant modelling at the universities of Wageningen and Utrecht. My research interest include model-based statistical inference and plant ecophysiology, with an emphasis on the contributions of photosynthesis and morphology to plant growth. I am also a passionate programmer and I have developed several R and Julia packages. I am also a strong supporter of reproducible research.
+I am a postdoctoral researcher at the universities of Wageningen and Utrecht. My skills include model-based statistical inference, scientific programming and process-based modelling as applied in Plant Sciences. I am an experienced R and Julia programmer with which I have built several [packages](https://github.com/alemorales).
+
