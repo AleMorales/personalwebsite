@@ -63,31 +63,27 @@ f(x + dx) = f(x) + f^{\prime}(x)dx
 <p><strong>Example implementation of dual numbers in Julia</strong></p>
 <p>That was a bit abstract and mathy, so let’s see how dual numbers work in practice. For this demonstration I will use the programming language <a href="https://julialang.org/">Julia</a> due to its easy syntax and semantics. The first step is to create a data type that can store the value of a variable and the extra dimension to store the derivative:</p>
 <pre class="julia"><code>struct DN 
-    value
+    val
     deriv
 end</code></pre>
-<p>This defines the type <code>DN</code> with fields <code>value</code> and <code>deriv</code>. Then, we need to define methods for the different operators and functions that we want to support with our dual numbers system. For example, the addition of two dual numbers (see definition above) can be implemented as:</p>
-<pre class="julia"><code>Base.:+(a::DN, b::DN) = DN(a.value + b.value, a.deriv .+ b.deriv)</code></pre>
-<p>As you can see, this operation will result in a new dual number, where the new value is sum of the values of a and b (<code>a.value + b.value</code>) and the new derivative is the sum of the derivatives stored in a and b (<code>a.deriv .+ b.deriv</code>). Compare this to the expression given in the section above. As further examples, let’s define the methods for multiplication (<code>*</code>) and for taking the power of a dual number to a constant (<code>^</code>):</p>
-<pre class="julia"><code>Base.:*(a::DN, b::DN) = DN(a.value*b.value, b.value.*a.deriv + a.value*b.deriv)
-Base.:^(a::DN, b) = DN(a.value^b, b.*a.value.^(b.-1).*a.deriv)</code></pre>
+<p>This defines the type <code>DN</code> with fields <code>val</code> and <code>deriv</code>. Then, we need to define methods for the different operators and functions that we want to support with our dual numbers system. For example, the addition of two dual numbers (see definition above) can be implemented as:</p>
+<pre class="julia"><code>Base.:+(a::DN, b::DN) = DN(a.val + b.val, a.deriv .+ b.deriv)</code></pre>
+<p>As you can see, this operation will result in a new dual number, where the new value is sum of the values of a and b (<code>a.val + b.val</code>) and the new derivative is the sum of the derivatives stored in a and b (<code>a.deriv .+ b.deriv</code>). Compare this to the expression given in the section above. As further examples, let’s define the methods for multiplication (<code>*</code>) and for taking the power of a dual number to a constant (<code>^</code>):</p>
+<pre class="julia"><code>Base.:*(a::DN, b::DN) = DN(a.val*b.val, b.val.*a.deriv + a.val*b.deriv)
+Base.:^(a::DN, b) = DN(a.val^b, b.*a.val.^(b.-1).*a.deriv)</code></pre>
 <p>Notice the pattern? The new value is always the result of applying the function or operator to the old values, whereas the new derivative is the result of applying the derivative of the function or operator to the old values and derivatives. So, if you know the derivative of a function, you can define the method for a dual number. Notice that the derivative stored in the new dual number is always a function of the derivative stored in the old dual numbers (as it should). This is the way dual numbers can propagate derivatives from the inputs to the outputs of your model!</p>
 <p>Let’s see how dual numbers perform automatic differenation by taking a model such as:</p>
 <p><span class="math display">\[
 d = c (a + b)^2
 \]</span></p>
 <p>and we would like to compute the derivative of <span class="math inline">\(d\)</span> with respect to <span class="math inline">\(a\)</span>. We simply create three dual numbers with the correct values and initial derivatives with respect to <span class="math inline">\(a\)</span>:</p>
-<pre class="julia"><code>julia&gt; a = DN(1.0, 1.0)
-DN(1.0, 1.0)
-
-julia&gt; b = DN(0.5, 0.0)
-DN(0.5, 0.0)
-
-julia&gt; c = DN(2.0, 0.0)
-DN(2.0, 0.0)</code></pre>
+<pre class="julia"><code>a = DN(1.0, 1.0)
+b = DN(0.5, 0.0)
+c = DN(2.0, 0.0)
+</code></pre>
 <p>Notice that the derivative of a variable with respect to itself is always one (<span class="math inline">\(\partial a/\partial a = 1\)</span>), and it is 0 for any other independent variable (<span class="math inline">\(\partial b/\partial a = 0\)</span> because <span class="math inline">\(b\)</span> is not a function of <span class="math inline">\(a\)</span>). Now we just apply the model:</p>
-<pre class="julia"><code>julia&gt; d = c*(a + b)^2
-DN(4.5, 6.0)</code></pre>
+<pre class="julia"><code>d = c*(a + b)^2
+# output: DN(4.5, 6.0)</code></pre>
 <p>Et voilà! Our AD system tells us that the value of <span class="math inline">\(d\)</span> is 4.5 and the derivative with respect to <span class="math inline">\(a\)</span> is 6. Of course, this model is trivial and I could have calculated these values by hand, which I will do to show you that this actually works:</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -96,17 +92,12 @@ d &amp;= c(a + b)^2 &amp;&amp;= 2\cdot1.5^2 &amp;= 4.5 \\
 \end{aligned}
 \]</span></p>
 <p>We can also calculate the derivatives with respect to all the inputs in one single pass. The trick is to include the derivatives of each input with respect to every other input in the initialization:</p>
-<pre class="julia"><code>julia&gt; a = DN(1.0, [1.0, 0.0, 0.0])
-DN(1.0, [1.0, 0.0, 0.0])
-
-julia&gt; b = DN(0.5, [0.0, 1.0, 0.0])
-DN(0.5, [0.0, 1.0, 0.0])
-
-julia&gt; c = DN(2.0, [0.0, 0.0, 1.0])
-DN(2.0, [0.0, 0.0, 1.0])</code></pre>
+<pre class="julia"><code>a = DN(1.0, [1.0, 0.0, 0.0])
+b = DN(0.5, [0.0, 1.0, 0.0])
+c = DN(2.0, [0.0, 0.0, 1.0])</code></pre>
 <p>In this case, each dual number holds in the field <code>deriv</code> the derivatives of itself with respect to <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span> and <span class="math inline">\(c\)</span>, respectively. And now:</p>
-<pre class="julia"><code>julia&gt; d = c*(a + b)^2
-DN(4.5, [6.0, 6.0, 2.25])</code></pre>
+<pre class="julia"><code>d = c*(a + b)^2
+# output: DN(4.5, [6.0, 6.0, 2.25])</code></pre>
 <p>Again, we can check that the results are correct:</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -121,4 +112,4 @@ DN(4.5, [6.0, 6.0, 2.25])</code></pre>
 <li><p>Define a data type/class to hold the values and derivatives.</p></li>
 <li><p>Define methods for operators and functions using the corresponding derivative rule.</p></li>
 </ol>
-<p>In practice one would also have to define methods for non-mathematical functions as well as logical operators (like <code>&gt;</code> and so on) to make sure that the program runs properly, but in all these cases the dual number should behave as a normal number (and only the contents of the <code>value</code> field should be used).</p>
+<p>In practice one would also have to define methods for non-mathematical functions as well as logical operators (like <code>&gt;</code> and so on) to make sure that the program runs properly, but in all these cases the dual number should behave as a normal number (and only the contents of the <code>val</code> field should be used).</p>
