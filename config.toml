@@ -110,7 +110,7 @@ enableGitInfo = false
   description = ""
 
   # Default image for social sharing and search engines. Place image in `static/img/` folder and specify image name here.
-  sharing_image = ""
+  sharing_image = "portrait.jpg"
 
   # Twitter username (without @). Used when a vistor shares your site on Twitter.
   twitter = "AMS_Model"
@@ -301,6 +301,12 @@ enableGitInfo = false
 #  weight = 2
 
 [[menu.main]]
+  name = "Blog"
+  url = "#posts"
+  weight = 2  
+
+
+[[menu.main]]
   name = "Publications"
   url = "#publications_selected"
   weight = 3
@@ -315,12 +321,11 @@ enableGitInfo = false
   url = "#teaching"
   weight = 5
   
-
 [[menu.main]]
-  name = "Blog"
-  url = "#posts"
-  weight = 6  
-
+  name = "Search"
+  url = "#search"
+  weight = 6
+  
 # Link to a PDF of your resume/CV from the menu.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # [[menu.main]]
