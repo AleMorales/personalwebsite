@@ -52,7 +52,7 @@ enableGitInfo = false
 
   # Your details.
   name = "Alejandro Morales"
-  role = "Scientific programmer and data analyst"
+  role = "Scientific programmer and data analyst. Plant scientist."
 
   # Organizations/Affiliations.
   #   Separate multiple entries with a comma, using the form: `[ {name="Org1", url=""}, {name="Org2", url=""} ]`.
@@ -200,7 +200,7 @@ enableGitInfo = false
   # Configuration of talk pages.
   [params.talks]
     # Show talk time?
-    time = true
+    time = false
 
   # Configuration of publication pages.
   [params.publications]

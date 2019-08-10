@@ -7,13 +7,16 @@ date = 2016-04-20T00:00:00
 # Order that this section will appear in.
 weight = 1
 
-# List your academic interests.
-[interests]
-  Skills = [
+# List your skills.
+[skills]
+  skills = [
+    "Data analysis",
+    "Mathematical modelling",
+    "Scientific programming",
     "Bayesian Statistics",
-    "Process-based Modelling",
-    "R language",
-    "Julia language",
+    "R",
+    "Julia",
+    "C++"
   ]
   
 
@@ -42,5 +45,5 @@ weight = 1
 
 # Biography
 
-I am a postdoctoral researcher at the universities of Wageningen and Utrecht. My skills include model-based statistical inference, scientific programming and process-based modelling as applied in Plant Sciences. I am an experienced R and Julia programmer with which I have built several [packages](https://github.com/alemorales).
+I am a postdoctoral researcher at the universities of Wageningen and Utrecht. My skills include model-based statistical inference (both frequentist and Bayesian), scientific programming and process-based modelling as applied in Plant Sciences. My modelling work has focuses on crop modelling and the systems biology of photosynthesis. I am an experienced R and Julia programmer, with some knowledge of C++, with which I have built several [libraries](https://github.com/alemorales).
 
