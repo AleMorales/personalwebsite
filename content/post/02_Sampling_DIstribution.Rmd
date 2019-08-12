@@ -131,7 +131,7 @@ sampling_distribution = future_map_dbl(1:N, ~ calc_statistic(population$rand(5))
 Let's compare the `sampling_distribution` with the theoretical distribution and the observed sample statistic:
 
 ```{r, fig.align='center'}
-plot(density(sampling_distribution, bw = "SJ"), xlab = "t statistic", main = "") # Histogram of sampling_distribution
+plot(density(sampling_distribution,), xlab = "t statistic", main = "", xlim = c(-10,10)) # Histogram of sampling_distribution
 curve(dt(x,4), -10, 10, add = T, col = 2, n = 1e3) # Theoretical distribution t(n-1)
 abline(v = calc_statistic(sample), col = 3) # Observed statistic
 ```
